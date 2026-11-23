@@ -9,7 +9,7 @@ const { authorize, ADMIN_ROLES, MANAGEMENT_ROLES, DESK_ROLES, FINANCE_ROLES, ALL
 const app = express();
 
 // Middleware
-app.use(cors({ origin: config.clientUrl, credentials: true }));
+app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 
 // Rate limiting for auth endpoints
