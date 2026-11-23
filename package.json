@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
+    "build": "prisma generate",
+    "postinstall": "prisma generate",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",
-    "prisma:seed": "npx prisma db seed",
+    "prisma:push": "npx prisma db push",
+    "prisma:seed": "node prisma/seed.js",
     "prisma:studio": "npx prisma studio"
   },
   "prisma": {
@@ -18,16 +21,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^7.10.0",
+    "@prisma/client": "^6.4.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
     "express-validator": "^7.3.2",
-    "jsonwebtoken": "^9.0.3"
-  },
-  "devDependencies": {
-    "prisma": "^8.0.0-rc.13"
+    "jsonwebtoken": "^9.0.3",
+    "prisma": "^6.4.0"
   }
 }

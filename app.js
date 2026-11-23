@@ -15,6 +15,15 @@ app.use(express.json({ limit: '10mb' }));
 // Rate limiting for auth endpoints
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: { message: 'Too many attempts. Please try again later.' } });
 
+// Health check and root endpoints
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Hotel Management API is running' });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
 // ==================== ROUTES ====================
 
 // Auth
