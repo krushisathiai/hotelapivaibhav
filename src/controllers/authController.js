@@ -22,13 +22,16 @@ const register = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create hotel first if hotelName provided
+    // Create hotel first if hotelName provided, or link to existing default hotel
     let hotelId = null;
     if (hotelName) {
       const hotel = await prisma.hotel.create({
         data: { name: hotelName, email: email },
       });
       hotelId = hotel.id;
+    } else {
+      const defaultHotel = await prisma.hotel.findFirst();
+      hotelId = defaultHotel?.id || null;
     }
 
     const user = await prisma.user.create({

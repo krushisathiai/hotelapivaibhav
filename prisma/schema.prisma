@@ -545,15 +545,17 @@ model MenuCategory {
 }
 
 model MenuItem {
-  id         String       @id @default(uuid())
-  name       String
-  price      Float
-  categoryId String
-  category   MenuCategory @relation(fields: [categoryId], references: [id])
-  isAvailable Boolean     @default(true)
-  image      String?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  categoryId  String
+  category    MenuCategory @relation(fields: [categoryId], references: [id])
+  isAvailable Boolean      @default(true)
+  isVeg       Boolean      @default(true)
+  image       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   orderItems RestaurantOrderItem[]
 
@@ -561,15 +563,20 @@ model MenuItem {
 }
 
 model RestaurantOrder {
-  id        String                @id @default(uuid())
-  tableId   String?
-  table     RestaurantTable?      @relation(fields: [tableId], references: [id])
-  roomCharge Boolean              @default(false) // charged to hotel room
-  bookingId String?
-  status    String                @default("pending") // pending, preparing, ready, served, paid
-  total     Float                 @default(0)
-  createdAt DateTime              @default(now())
-  updatedAt DateTime              @updatedAt
+  id          String                @id @default(uuid())
+  orderNumber String?
+  tableId     String?
+  table       RestaurantTable?      @relation(fields: [tableId], references: [id])
+  roomCharge  Boolean               @default(true) // charged to hotel room
+  bookingId   String?
+  roomNumber  String?
+  guestName   String?
+  notes       String?
+  status      String                @default("PENDING") // PENDING, PREPARING, READY, SERVED, CANCELLED, PAID
+  total       Float                 @default(0)
+  hotelId     String?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
 
   items RestaurantOrderItem[]
 }

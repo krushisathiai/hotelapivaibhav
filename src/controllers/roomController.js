@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 const getRooms = async (req, res, next) => {
   try {
     const { status, type, floor, search } = req.query;
-    const where = { hotelId: req.user.hotelId };
+    const hotelId = req.user?.hotelId || (await prisma.hotel.findFirst())?.id;
+    const where = hotelId ? { hotelId } : {};
     if (status) where.status = status;
     if (type) where.roomTypeId = type;
     if (floor) where.floor = parseInt(floor);

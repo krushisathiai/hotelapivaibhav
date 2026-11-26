@@ -72,13 +72,27 @@ app.delete('/api/bookings/:id', authenticate, authorize(...ADMIN_ROLES), booking
 
 // Billing & Payments
 const billingCtrl = require('./src/controllers/billingController');
-app.get('/api/payments', authenticate, authorize(...FINANCE_ROLES, 'RECEPTIONIST'), billingCtrl.getPayments);
-app.post('/api/payments', authenticate, authorize(...FINANCE_ROLES, 'RECEPTIONIST'), billingCtrl.createPayment);
-app.get('/api/invoices', authenticate, authorize(...FINANCE_ROLES, 'RECEPTIONIST'), billingCtrl.getInvoices);
-app.get('/api/billing/invoices', authenticate, authorize(...FINANCE_ROLES, 'RECEPTIONIST'), billingCtrl.getInvoices);
+app.get('/api/payments', authenticate, billingCtrl.getPayments);
+app.post('/api/payments', authenticate, billingCtrl.createPayment);
+app.get('/api/invoices', authenticate, billingCtrl.getInvoices);
+app.get('/api/billing/invoices', authenticate, billingCtrl.getInvoices);
 app.get('/api/invoices/:id', authenticate, billingCtrl.getInvoice);
-app.post('/api/invoices', authenticate, authorize(...FINANCE_ROLES, 'RECEPTIONIST'), billingCtrl.generateInvoice);
-app.post('/api/billing/invoices', authenticate, authorize(...FINANCE_ROLES, 'RECEPTIONIST'), billingCtrl.generateInvoice);
+app.post('/api/invoices', authenticate, billingCtrl.processCheckoutPayment);
+app.post('/api/billing/invoices', authenticate, billingCtrl.processCheckoutPayment);
+app.get('/api/billing/checkout/:bookingId', authenticate, billingCtrl.getCheckoutPreview);
+app.post('/api/billing/checkout/pay', authenticate, billingCtrl.processCheckoutPayment);
+
+// Restaurant & Food Ordering (Guest / Waiter / Admin)
+const restCtrl = require('./src/controllers/restaurantController');
+app.get('/api/restaurant/menu', authenticate, restCtrl.getMenu);
+app.post('/api/restaurant/menu', authenticate, restCtrl.createMenuItem);
+app.put('/api/restaurant/menu/:id', authenticate, restCtrl.updateMenuItem);
+app.delete('/api/restaurant/menu/:id', authenticate, restCtrl.deleteMenuItem);
+app.post('/api/restaurant/orders', authenticate, restCtrl.createOrder);
+app.get('/api/restaurant/orders', authenticate, restCtrl.getOrders);
+app.patch('/api/restaurant/orders/:id/status', authenticate, restCtrl.updateOrderStatus);
+app.put('/api/restaurant/orders/:id/status', authenticate, restCtrl.updateOrderStatus);
+app.get('/api/restaurant/room-orders', authenticate, restCtrl.getRoomOrders);
 
 // Services
 const serviceCtrl = require('./src/controllers/serviceController');
